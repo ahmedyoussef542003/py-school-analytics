@@ -1,7 +1,9 @@
+import json
 import os
+import sys
 import customtkinter as ctk
 
-# استيراد كافة الصفحات
+# استيراد كافة الصفحات ودوال قاعدة البيانات
 from attendance_page import AttendancePage
 from database import init_db
 from db_info_page import DbInfoPage
@@ -30,17 +32,16 @@ class ProfessionalSchoolApp(ctk.CTk):
         except Exception:
             pass
 
-        # تحديد مسار قاعدة البيانات وتهيئتها
-        self.db_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "school_system.db"
-        )
+        # ---------------- 1. إعداد إدارة مسار قاعدة البيانات ----------------
+        self.config_file = os.path.join(self.get_base_dir(), "config.json")
+        self.db_path = self.load_database_path()
         init_db(self.db_path)
 
         # تخطيط النافذة الرئيسية (Grid Layout)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        # ---------------- 1. الشريط الجانبي (Sidebar) ----------------
+        # ---------------- 2. الشريط الجانبي (Sidebar) ----------------
         self.sidebar_frame = ctk.CTkFrame(self, width=220, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
         self.sidebar_frame.grid_rowconfigure(8, weight=1)
@@ -109,7 +110,7 @@ class ProfessionalSchoolApp(ctk.CTk):
         )
         self.btn_db_info.grid(row=7, column=0, padx=15, pady=8, sticky="ew")
 
-        # ---------------- 2. حاوية المحتوى الرئيسية ----------------
+        # ---------------- 3. حاوية المحتوى الرئيسية ----------------
         self.main_container = ctk.CTkFrame(
             self, corner_radius=15, fg_color="#1E1E1E"
         )
@@ -122,6 +123,53 @@ class ProfessionalSchoolApp(ctk.CTk):
 
         # فتح الداشبورد كصفحة افتراضية عند تشغيل التطبيق
         self.show_overview_tab()
+
+    # ---------------- دوال التعامل مع المسار وإعدادات الحفظ ----------------
+
+    def get_base_dir(self):
+        """الحصول على المسار الأساسي سواء للملف النصي أو الـ EXE"""
+        if getattr(sys, "frozen", False):
+            return os.path.dirname(sys.executable)
+        return os.path.dirname(os.path.abspath(__file__))
+
+    def load_database_path(self):
+        """تحميل المسار من config.json إن وجد، وإلا فتح المسار الافتراضي"""
+        default_path = os.path.join(self.get_base_dir(), "school_system.db")
+
+        if os.path.exists(self.config_file):
+            try:
+                with open(self.config_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    saved_path = data.get("db_path", "")
+                    if saved_path and os.path.exists(saved_path):
+                        return saved_path
+            except Exception:
+                pass
+
+        return default_path
+
+    def save_database_path(self, new_path):
+        """حفظ المسار الجديد في config.json"""
+        try:
+            with open(self.config_file, "w", encoding="utf-8") as f:
+                json.dump(
+                    {"db_path": new_path}, f, ensure_ascii=False, indent=4
+                )
+        except Exception as e:
+            print(f"خطأ أثناء حفظ المسار: {e}")
+
+    def update_database_path(self, new_path):
+        """دالة الاستدعاء عند تغير المسار من صفحة DbInfoPage"""
+        self.db_path = new_path
+        self.save_database_path(new_path)
+        init_db(self.db_path)
+
+        # تحديث متغير db_path في كل الكائنات للشاشات المفتوحة
+        for view in self.views.values():
+            if hasattr(view, "db_path"):
+                view.db_path = new_path
+
+    # ---------------- إعداد الواجهات والتبديل بينها ----------------
 
     def setup_views(self):
         """تسجيل وإعداد كافة الصفحات داخل الحاوية"""
@@ -139,7 +187,13 @@ class ProfessionalSchoolApp(ctk.CTk):
         self.views["report"] = StudentReportPage(
             self.main_container, self.db_path
         )
-        self.views["db_info"] = DbInfoPage(self.main_container, self.db_path)
+
+        # تمرير دالة التحديث لصفحة DbInfoPage
+        self.views["db_info"] = DbInfoPage(
+            self.main_container,
+            self.db_path,
+            on_db_change_callback=self.update_database_path,
+        )
 
     def switch_view(self, active_key):
         """التبديل بين الواجهات بدون إعادة تحميل الكائنات"""

@@ -1,12 +1,13 @@
 import os
 import customtkinter as ctk
 
+from attendance_page import AttendancePage
 from database import init_db
+from db_info_page import DbInfoPage
 from grades_page import GradesPage
 from skills_page import SkillsPage
-from attendance_page import AttendancePage
-from db_info_page import DbInfoPage
 from student_report_page import StudentReportPage
+from students_page import StudentsPage  # تم إضافة الاستيراد
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
@@ -38,7 +39,7 @@ class ProfessionalSchoolApp(ctk.CTk):
         # الشريط الجانبي
         self.sidebar_frame = ctk.CTkFrame(self, width=200, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(6, weight=1)
+        self.sidebar_frame.grid_rowconfigure(7, weight=1)
 
         self.logo_label = ctk.CTkLabel(
             self.sidebar_frame,
@@ -77,6 +78,17 @@ class ProfessionalSchoolApp(ctk.CTk):
             row=3, column=0, padx=15, pady=10, sticky="ew"
         )
 
+        # زر إدارة الطالبات جديد
+        self.btn_students = ctk.CTkButton(
+            self.sidebar_frame,
+            text="إدارة الطالبات 👩‍🎓",
+            font=("Segoe UI", 14),
+            fg_color="transparent",
+            text_color=("gray10", "gray90"),
+            command=self.show_students_tab,
+        )
+        self.btn_students.grid(row=4, column=0, padx=15, pady=10, sticky="ew")
+
         self.btn_report = ctk.CTkButton(
             self.sidebar_frame,
             text="تقرير الطالب 📊",
@@ -85,7 +97,7 @@ class ProfessionalSchoolApp(ctk.CTk):
             text_color=("gray10", "gray90"),
             command=self.show_report_tab,
         )
-        self.btn_report.grid(row=4, column=0, padx=15, pady=10, sticky="ew")
+        self.btn_report.grid(row=5, column=0, padx=15, pady=10, sticky="ew")
 
         self.btn_db_info = ctk.CTkButton(
             self.sidebar_frame,
@@ -95,7 +107,7 @@ class ProfessionalSchoolApp(ctk.CTk):
             text_color=("gray10", "gray90"),
             command=self.show_db_info_tab,
         )
-        self.btn_db_info.grid(row=5, column=0, padx=15, pady=10, sticky="ew")
+        self.btn_db_info.grid(row=6, column=0, padx=15, pady=10, sticky="ew")
 
         # حاوية المحتوى الرئيسية
         self.main_container = ctk.CTkFrame(
@@ -115,6 +127,9 @@ class ProfessionalSchoolApp(ctk.CTk):
         self.views["attendance"] = AttendancePage(
             self.main_container, self.db_path
         )
+        self.views["students"] = StudentsPage(
+            self.main_container, self.db_path
+        )  # إضافة الواجهة
         self.views["report"] = StudentReportPage(
             self.main_container, self.db_path
         )
@@ -148,6 +163,14 @@ class ProfessionalSchoolApp(ctk.CTk):
             fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
         )
 
+    def show_students_tab(self):
+        self.switch_view("students")
+        self.reset_sidebar_colors()
+        self.btn_students.configure(
+            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+        )
+        self.views["students"].refresh_students_list()
+
     def show_report_tab(self):
         self.switch_view("report")
         self.reset_sidebar_colors()
@@ -168,6 +191,7 @@ class ProfessionalSchoolApp(ctk.CTk):
             self.btn_grades,
             self.btn_skills,
             self.btn_attendance,
+            self.btn_students,
             self.btn_report,
             self.btn_db_info,
         ]:

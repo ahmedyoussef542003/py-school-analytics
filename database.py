@@ -94,3 +94,27 @@ def get_or_create_student(cursor, name, grade, cls_name, section="عام"):
         (name, grade, cls_name, section),
     )
     return cursor.lastrowid
+
+
+def get_all_students(db_path):
+    """جلب جميع الطالبات مرتبات بالأسم"""
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section 
+            FROM Students 
+            ORDER BY student_name
+        """
+        )
+        return cursor.fetchall()
+
+
+def delete_student_by_id(db_path, student_id):
+    """حذف الطالبة مع كافة سجلاتها بفضل PRAGMA foreign_keys = ON"""
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM Students WHERE student_id = ?", (student_id,)
+        )
+        conn.commit()

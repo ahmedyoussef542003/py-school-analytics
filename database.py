@@ -118,3 +118,136 @@ def delete_student_by_id(db_path, student_id):
             "DELETE FROM Students WHERE student_id = ?", (student_id,)
         )
         conn.commit()
+
+
+# =========================================================
+# ✅ الدوال الجديدة المضافة لتعديل بيانات الطالبة
+# =========================================================
+
+def get_student_by_id(db_path, student_id):
+    """
+    جلب بيانات طالبة محددة باستخدام ID
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section
+            FROM Students
+            WHERE student_id = ?
+            """,
+            (student_id,)
+        )
+        return cursor.fetchone()
+
+
+def update_student(db_path, student_id, name, grade_level, class_name, section):
+    """
+    تحديث بيانات طالبة موجودة
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        
+        # التحقق من وجود الطالبة
+        cursor.execute(
+            "SELECT student_id FROM Students WHERE student_id = ?",
+            (student_id,)
+        )
+        if not cursor.fetchone():
+            raise ValueError(f"الطالبة رقم {student_id} غير موجودة")
+        
+        # تحديث البيانات
+        cursor.execute(
+            """
+            UPDATE Students
+            SET student_name = ?,
+                grade_level = ?,
+                class_name = ?,
+                section = ?
+            WHERE student_id = ?
+            """,
+            (name, grade_level, class_name, section, student_id)
+        )
+        conn.commit()
+        return True
+
+
+def search_students(db_path, search_term):
+    """
+    البحث عن طالبات حسب الاسم
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section 
+            FROM Students 
+            WHERE student_name LIKE ?
+            ORDER BY student_name
+            """,
+            (f"%{search_term}%",)
+        )
+        return cursor.fetchall()
+
+
+def get_students_count(db_path):
+    """
+    الحصول على عدد الطالبات الكلي
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM Students")
+        return cursor.fetchone()[0]
+
+
+def get_student_by_name(db_path, name):
+    """
+    جلب بيانات طالبة باستخدام الاسم
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section
+            FROM Students
+            WHERE student_name = ?
+            """,
+            (name,)
+        )
+        return cursor.fetchone()
+
+
+def get_students_by_grade(db_path, grade_level):
+    """
+    جلب جميع الطالبات في صف معين
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section 
+            FROM Students 
+            WHERE grade_level = ?
+            ORDER BY student_name
+            """,
+            (grade_level,)
+        )
+        return cursor.fetchall()
+
+
+def get_students_by_section(db_path, section):
+    """
+    جلب جميع الطالبات في شعبة معينة
+    """
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section 
+            FROM Students 
+            WHERE section = ?
+            ORDER BY student_name
+            """,
+            (section,)
+        )
+        return cursor.fetchall()

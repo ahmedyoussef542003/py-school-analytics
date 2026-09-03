@@ -5,9 +5,10 @@ import customtkinter as ctk
 class StudentReportPage(ctk.CTkFrame):
 
     def __init__(self, parent, db_path):
+        # تغيير الخلفية إلى أبيض
         super().__init__(
             parent,
-            fg_color="transparent"
+            fg_color="#FFFFFF"
         )
 
         self.db_path = db_path
@@ -29,8 +30,9 @@ class StudentReportPage(ctk.CTkFrame):
             font=ctk.CTkFont(
                 family="Segoe UI",
                 size=22,
-                weight="normal"
-            )
+                weight="bold"
+            ),
+            text_color="#0F172A"  # لون غامق
         )
 
         title.pack(
@@ -63,8 +65,11 @@ class StudentReportPage(ctk.CTkFrame):
             font=ctk.CTkFont(
                 family="Segoe UI",
                 size=12,
-                weight="normal"
-            )
+                weight="bold"
+            ),
+            fg_color="#3B82F6",
+            hover_color="#2563EB",
+            text_color="white"
         )
 
         search_btn.pack(
@@ -85,7 +90,10 @@ class StudentReportPage(ctk.CTkFrame):
                 family="Segoe UI",
                 size=13,
                 weight="normal"
-            )
+            ),
+            fg_color="#F8FAFC",
+            border_color="#CBD5E1",
+            text_color="#0F172A"
         )
 
         self.student_entry.pack(
@@ -105,7 +113,8 @@ class StudentReportPage(ctk.CTkFrame):
                 size=14,
                 weight="normal"
             ),
-            anchor="e"
+            anchor="e",
+            text_color="#0F172A"
         )
 
         search_label.pack(
@@ -114,12 +123,12 @@ class StudentReportPage(ctk.CTkFrame):
         )
 
         # =====================================================
-        # Scrollable Container
+        # Scrollable Container - تغيير الخلفية إلى أبيض
         # =====================================================
 
         self.container = ctk.CTkScrollableFrame(
             self,
-            fg_color="#1e1e1e",
+            fg_color="#F8FAFC",  # أبيض فاتح
             corner_radius=10
         )
 
@@ -137,13 +146,15 @@ class StudentReportPage(ctk.CTkFrame):
     def render_table(self, title, headers, rows):
 
         # =====================================================
-        # Main Table Frame
+        # Main Table Frame - تغيير إلى أبيض
         # =====================================================
 
         table_frame = ctk.CTkFrame(
             self.container,
-            fg_color="#2b2b2b",
-            corner_radius=8
+            fg_color="#FFFFFF",  # أبيض
+            corner_radius=8,
+            border_width=1,
+            border_color="#E2E8F0"
         )
 
         table_frame.pack(
@@ -165,7 +176,7 @@ class StudentReportPage(ctk.CTkFrame):
                 size=15,
                 weight="bold"
             ),
-            text_color="#60A5FA",
+            text_color="#2563EB",  # أزرق غامق
             anchor="e"
         )
 
@@ -177,12 +188,12 @@ class StudentReportPage(ctk.CTkFrame):
         )
 
         # =====================================================
-        # Header
+        # Header - تغيير إلى فاتح
         # =====================================================
 
         h_frame = ctk.CTkFrame(
             table_frame,
-            fg_color="#334155",
+            fg_color="#F1F5F9",  # رمادي فاتح
             height=30
         )
 
@@ -194,23 +205,6 @@ class StudentReportPage(ctk.CTkFrame):
 
         # =====================================================
         # RTL Visual Order
-        #
-        # Tkinter Grid:
-        # column 0 = left
-        #
-        # لذلك نعكس الأعمدة وقت العرض فقط.
-        #
-        # مثال:
-        #
-        # البيانات:
-        # [المادة, نوع الاختبار, الدرجة]
-        #
-        # العرض:
-        # [الدرجة, نوع الاختبار, المادة]
-        #
-        # وبالتالي بصريًا:
-        #
-        # المادة | نوع الاختبار | الدرجة
         # =====================================================
 
         display_headers = headers[::-1]
@@ -223,9 +217,9 @@ class StudentReportPage(ctk.CTkFrame):
                 font=ctk.CTkFont(
                     family="Segoe UI",
                     size=12,
-                    weight="normal"
+                    weight="bold"
                 ),
-                text_color="white",
+                text_color="#0F172A",  # غامق
                 anchor="center"
             )
 
@@ -251,7 +245,7 @@ class StudentReportPage(ctk.CTkFrame):
             no_data = ctk.CTkLabel(
                 table_frame,
                 text="لا توجد بيانات متاحة",
-                text_color="gray",
+                text_color="#64748B",  # رمادي
                 font=ctk.CTkFont(
                     family="Segoe UI",
                     size=13,
@@ -266,16 +260,16 @@ class StudentReportPage(ctk.CTkFrame):
             return
 
         # =====================================================
-        # Table Rows
+        # Table Rows - تغيير الألوان إلى فاتحة
         # =====================================================
 
         for r_idx, row in enumerate(rows):
 
-            # Alternate row colors
+            # ألوان صفوف متناوبة فاتحة
             bg = (
-                "#1e293b"
+                "#F8FAFC"  # رمادي فاتح جداً
                 if r_idx % 2 == 0
-                else "#0f172a"
+                else "#FFFFFF"  # أبيض
             )
 
             r_frame = ctk.CTkFrame(
@@ -308,7 +302,8 @@ class StudentReportPage(ctk.CTkFrame):
                         size=12,
                         weight="normal"
                     ),
-                    anchor="center"
+                    anchor="center",
+                    text_color="#0F172A"  # غامق
                 )
 
                 label.grid(
@@ -339,9 +334,6 @@ class StudentReportPage(ctk.CTkFrame):
 
         # =====================================================
         # Get Student Name
-        #
-        # مهم:
-        # لا يوجد أي RTL processing هنا.
         # =====================================================
 
         name = self.student_entry.get().strip()
@@ -390,11 +382,11 @@ class StudentReportPage(ctk.CTkFrame):
                 error_label = ctk.CTkLabel(
                     self.container,
                     text="لم يتم العثور على الطالبة!",
-                    text_color="#EF4444",
+                    text_color="#EF4444",  # أحمر
                     font=ctk.CTkFont(
                         family="Segoe UI",
                         size=16,
-                        weight="normal"
+                        weight="bold"
                     )
                 )
 
@@ -417,13 +409,15 @@ class StudentReportPage(ctk.CTkFrame):
             ) = student
 
             # =================================================
-            # Student Information Frame
+            # Student Information Frame - تغيير إلى أبيض
             # =================================================
 
             info_frame = ctk.CTkFrame(
                 self.container,
-                fg_color="#1e1e1e",
-                corner_radius=8
+                fg_color="#FFFFFF",  # أبيض
+                corner_radius=8,
+                border_width=1,
+                border_color="#E2E8F0"
             )
 
             info_frame.pack(
@@ -442,9 +436,9 @@ class StudentReportPage(ctk.CTkFrame):
                 font=ctk.CTkFont(
                     family="Segoe UI",
                     size=15,
-                    weight="normal"
+                    weight="bold"
                 ),
-                text_color="#38BDF8",
+                text_color="#2563EB",  # أزرق
                 anchor="e"
             ).pack(
                 fill="x",
@@ -465,7 +459,7 @@ class StudentReportPage(ctk.CTkFrame):
                     size=13,
                     weight="normal"
                 ),
-                text_color="white",
+                text_color="#0F172A",  # غامق
                 anchor="e"
             ).pack(
                 fill="x",
@@ -486,7 +480,7 @@ class StudentReportPage(ctk.CTkFrame):
                     size=13,
                     weight="normal"
                 ),
-                text_color="white",
+                text_color="#0F172A",
                 anchor="e"
             ).pack(
                 fill="x",
@@ -507,7 +501,7 @@ class StudentReportPage(ctk.CTkFrame):
                     size=13,
                     weight="normal"
                 ),
-                text_color="white",
+                text_color="#0F172A",
                 anchor="e"
             ).pack(
                 fill="x",
@@ -628,9 +622,9 @@ class StudentReportPage(ctk.CTkFrame):
             ) in raw_skills:
 
                 if is_mastered == 1:
-                    status = "متقن ✓"
+                    status = "✅ متقن"
                 else:
-                    status = "غير متقن ✗"
+                    status = "❌ غير متقن"
 
                 skills.append([
                     subject,

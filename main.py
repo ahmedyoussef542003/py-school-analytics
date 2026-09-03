@@ -13,7 +13,8 @@ from skills_page import SkillsPage
 from student_report_page import StudentReportPage
 from students_page import StudentsPage
 
-ctk.set_appearance_mode("Dark")
+# تغيير وضع الإظهار إلى فاتح (Light)
+ctk.set_appearance_mode("Light")  # تم التغيير من "Dark" إلى "Light"
 ctk.set_default_color_theme("blue")
 
 
@@ -42,7 +43,12 @@ class ProfessionalSchoolApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
 
         # ---------------- 2. الشريط الجانبي (Sidebar) ----------------
-        self.sidebar_frame = ctk.CTkFrame(self, width=220, corner_radius=0)
+        self.sidebar_frame = ctk.CTkFrame(
+            self, 
+            width=220, 
+            corner_radius=0,
+            fg_color="#F8FAFC"  # خلفية الشريط الجانبي أبيض فاتح
+        )
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
         self.sidebar_frame.grid_rowconfigure(8, weight=1)
 
@@ -50,6 +56,7 @@ class ProfessionalSchoolApp(ctk.CTk):
             self.sidebar_frame,
             text="نظام التحليل\nالمدرسي 📊",
             font=("Segoe UI", 18, "bold"),
+            text_color="#0F172A"  # لون النص غامق
         )
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 25))
 
@@ -59,6 +66,9 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="نظرة عامة (الداشبورد) 📈",
             font=("Segoe UI", 13, "bold"),
             command=self.show_overview_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_overview.grid(row=1, column=0, padx=15, pady=8, sticky="ew")
 
@@ -67,6 +77,9 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="إدخال الدرجات 📝",
             font=("Segoe UI", 13),
             command=self.show_grades_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_grades.grid(row=2, column=0, padx=15, pady=8, sticky="ew")
 
@@ -75,6 +88,9 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="تقييم المهارات ⭐",
             font=("Segoe UI", 13),
             command=self.show_skills_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_skills.grid(row=3, column=0, padx=15, pady=8, sticky="ew")
 
@@ -83,6 +99,9 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="الغياب والحضور الشهري 📅",
             font=("Segoe UI", 13),
             command=self.show_attendance_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_attendance.grid(row=4, column=0, padx=15, pady=8, sticky="ew")
 
@@ -91,6 +110,9 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="إدارة الطالبات 👩‍🎓",
             font=("Segoe UI", 13),
             command=self.show_students_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_students.grid(row=5, column=0, padx=15, pady=8, sticky="ew")
 
@@ -99,6 +121,9 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="تقرير الطالب 📄",
             font=("Segoe UI", 13),
             command=self.show_report_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_report.grid(row=6, column=0, padx=15, pady=8, sticky="ew")
 
@@ -107,12 +132,17 @@ class ProfessionalSchoolApp(ctk.CTk):
             text="بيانات الاتصال 🔍",
             font=("Segoe UI", 13),
             command=self.show_db_info_tab,
+            fg_color="transparent",
+            text_color="#0F172A",
+            hover_color="#E2E8F0",
         )
         self.btn_db_info.grid(row=7, column=0, padx=15, pady=8, sticky="ew")
 
         # ---------------- 3. حاوية المحتوى الرئيسية ----------------
         self.main_container = ctk.CTkFrame(
-            self, corner_radius=15, fg_color="#1E1E1E"
+            self, 
+            corner_radius=15, 
+            fg_color="#FFFFFF"  # تم التغيير من "#1E1E1E" إلى أبيض
         )
         self.main_container.grid(
             row=0, column=1, padx=15, pady=15, sticky="nsew"
@@ -215,7 +245,8 @@ class ProfessionalSchoolApp(ctk.CTk):
             self.btn_db_info,
         ]:
             btn.configure(
-                fg_color="transparent", text_color=("gray10", "gray90")
+                fg_color="transparent", 
+                text_color="#0F172A"  # تم التغيير من ("gray10", "gray90")
             )
 
     # ---------------- دوال استدعاء التبويبات ----------------
@@ -224,7 +255,8 @@ class ProfessionalSchoolApp(ctk.CTk):
         self.switch_view("overview")
         self.reset_sidebar_colors()
         self.btn_overview.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",  # تم التغيير من ("#3B82F6", "#1D4ED8")
+            text_color="white"
         )
         self.views["overview"].refresh_dashboard()
 
@@ -232,28 +264,32 @@ class ProfessionalSchoolApp(ctk.CTk):
         self.switch_view("grades")
         self.reset_sidebar_colors()
         self.btn_grades.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",
+            text_color="white"
         )
 
     def show_skills_tab(self):
         self.switch_view("skills")
         self.reset_sidebar_colors()
         self.btn_skills.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",
+            text_color="white"
         )
 
     def show_attendance_tab(self):
         self.switch_view("attendance")
         self.reset_sidebar_colors()
         self.btn_attendance.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",
+            text_color="white"
         )
 
     def show_students_tab(self):
         self.switch_view("students")
         self.reset_sidebar_colors()
         self.btn_students.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",
+            text_color="white"
         )
         self.views["students"].refresh_students_list()
 
@@ -261,14 +297,16 @@ class ProfessionalSchoolApp(ctk.CTk):
         self.switch_view("report")
         self.reset_sidebar_colors()
         self.btn_report.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",
+            text_color="white"
         )
 
     def show_db_info_tab(self):
         self.switch_view("db_info")
         self.reset_sidebar_colors()
         self.btn_db_info.configure(
-            fg_color=("#3B82F6", "#1D4ED8"), text_color="white"
+            fg_color="#3B82F6",
+            text_color="white"
         )
         self.views["db_info"].refresh_db_info()
 

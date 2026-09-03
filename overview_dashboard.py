@@ -11,7 +11,8 @@ plt.rcParams['axes.unicode_minus'] = False
 class OverviewDashboardPage(ctk.CTkFrame):
 
     def __init__(self, parent, db_path):
-        super().__init__(parent, fg_color="#1E1E1E")
+        # تغيير الخلفية إلى أبيض
+        super().__init__(parent, fg_color="#FFFFFF")
         self.db_path = db_path
 
         self.grid_columnconfigure(1, weight=1)
@@ -19,7 +20,7 @@ class OverviewDashboardPage(ctk.CTkFrame):
 
         # ---------------- 1. شريط الفلاتر الجانبي ----------------
         self.sidebar = ctk.CTkScrollableFrame(
-            self, width=220, fg_color="#2B2B2B"
+            self, width=220, fg_color="#F8FAFC"  # تغيير إلى أبيض فاتح
         )
         self.sidebar.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
@@ -28,10 +29,16 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.sidebar,
             text="نوع الامتحان",
             font=("Segoe UI", 12, "bold"),
-            text_color="white",
+            text_color="#0F172A",  # تغيير إلى غامق
         ).pack(anchor="w", padx=10, pady=(10, 2))
         self.filter_exam = ctk.CTkOptionMenu(
-            self.sidebar, values=["All"], command=self.refresh_dashboard
+            self.sidebar, 
+            values=["All"], 
+            command=self.refresh_dashboard,
+            fg_color="#FFFFFF",
+            button_color="#E2E8F0",
+            button_hover_color="#CBD5E1",
+            text_color="#0F172A",
         )
         self.filter_exam.pack(fill="x", padx=10, pady=2)
 
@@ -40,10 +47,16 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.sidebar,
             text="القسم",
             font=("Segoe UI", 12, "bold"),
-            text_color="white",
+            text_color="#0F172A",
         ).pack(anchor="w", padx=10, pady=(8, 2))
         self.filter_section = ctk.CTkOptionMenu(
-            self.sidebar, values=["All"], command=self.refresh_dashboard
+            self.sidebar, 
+            values=["All"], 
+            command=self.refresh_dashboard,
+            fg_color="#FFFFFF",
+            button_color="#E2E8F0",
+            button_hover_color="#CBD5E1",
+            text_color="#0F172A",
         )
         self.filter_section.pack(fill="x", padx=10, pady=2)
 
@@ -52,10 +65,16 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.sidebar,
             text="الصف",
             font=("Segoe UI", 12, "bold"),
-            text_color="white",
+            text_color="#0F172A",
         ).pack(anchor="w", padx=10, pady=(8, 2))
         self.filter_grade = ctk.CTkOptionMenu(
-            self.sidebar, values=["All"], command=self.refresh_dashboard
+            self.sidebar, 
+            values=["All"], 
+            command=self.refresh_dashboard,
+            fg_color="#FFFFFF",
+            button_color="#E2E8F0",
+            button_hover_color="#CBD5E1",
+            text_color="#0F172A",
         )
         self.filter_grade.pack(fill="x", padx=10, pady=2)
 
@@ -64,10 +83,16 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.sidebar,
             text="السنة الدراسية",
             font=("Segoe UI", 12, "bold"),
-            text_color="white",
+            text_color="#0F172A",
         ).pack(anchor="w", padx=10, pady=(8, 2))
         self.filter_year = ctk.CTkOptionMenu(
-            self.sidebar, values=["All"], command=self.refresh_dashboard
+            self.sidebar, 
+            values=["All"], 
+            command=self.refresh_dashboard,
+            fg_color="#FFFFFF",
+            button_color="#E2E8F0",
+            button_hover_color="#CBD5E1",
+            text_color="#0F172A",
         )
         self.filter_year.pack(fill="x", padx=10, pady=2)
 
@@ -76,10 +101,16 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.sidebar,
             text="اسم الطالب",
             font=("Segoe UI", 12, "bold"),
-            text_color="white",
+            text_color="#0F172A",
         ).pack(anchor="w", padx=10, pady=(8, 2))
         self.filter_student = ctk.CTkOptionMenu(
-            self.sidebar, values=["All"], command=self.refresh_dashboard
+            self.sidebar, 
+            values=["All"], 
+            command=self.refresh_dashboard,
+            fg_color="#FFFFFF",
+            button_color="#E2E8F0",
+            button_hover_color="#CBD5E1",
+            text_color="#0F172A",
         )
         self.filter_student.pack(fill="x", padx=10, pady=2)
 
@@ -88,10 +119,16 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.sidebar,
             text="المادة",
             font=("Segoe UI", 12, "bold"),
-            text_color="white",
+            text_color="#0F172A",
         ).pack(anchor="w", padx=10, pady=(8, 2))
         self.filter_subject = ctk.CTkOptionMenu(
-            self.sidebar, values=["All"], command=self.refresh_dashboard
+            self.sidebar, 
+            values=["All"], 
+            command=self.refresh_dashboard,
+            fg_color="#FFFFFF",
+            button_color="#E2E8F0",
+            button_hover_color="#CBD5E1",
+            text_color="#0F172A",
         )
         self.filter_subject.pack(fill="x", padx=10, pady=2)
 
@@ -105,7 +142,7 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.main_content,
             text="نظرة عامة لأداء الطلاب خلال الدراسة",
             font=("Segoe UI", 22, "bold"),
-            text_color="white",
+            text_color="#0F172A",  # تغيير إلى غامق
         ).grid(row=0, column=0, pady=(0, 15))
 
         # ---------------- 3. بطاقات المؤشرات KPIs ----------------
@@ -117,29 +154,29 @@ class OverviewDashboardPage(ctk.CTkFrame):
             self.kpi_frame.grid_columnconfigure(i, weight=1)
 
         self.kpi_total = self.create_kpi_card(
-            self.kpi_frame, 0, "العدد الكلي للطلاب", "0", "#FFFFFF", "#000000"
+            self.kpi_frame, 0, "العدد الكلي للطلاب", "0", "#F0F9FF", "#0F172A"
         )
         self.kpi_avg = self.create_kpi_card(
-            self.kpi_frame, 1, "متوسط الدرجات", "0.00", "#FFFFFF", "#000000"
+            self.kpi_frame, 1, "متوسط الدرجات", "0.00", "#F0FDF4", "#0F172A"
         )
         self.kpi_pass = self.create_kpi_card(
-            self.kpi_frame, 2, "% نسبة النجاح", "0.00", "#FFF2C6", "#B48200"
+            self.kpi_frame, 2, "% نسبة النجاح", "0.00", "#FEFCE8", "#854D0E"
         )
         self.kpi_improve = self.create_kpi_card(
-            self.kpi_frame, 3, "عدد الطلاب للتحسين", "0", "#D4A017", "#FFFFFF"
+            self.kpi_frame, 3, "عدد الطلاب للتحسين", "0", "#FEF3C7", "#92400E"
         )
         self.kpi_struggle = self.create_kpi_card(
             self.kpi_frame,
             4,
             "عدد الطلاب المتعثرين",
             "0",
-            "#C00000",
-            "#FFFFFF",
+            "#FEE2E2",
+            "#991B1B",
         )
 
         # ---------------- 4. حاوية الرسم البياني ----------------
         self.chart_container = ctk.CTkFrame(
-            self.main_content, fg_color="#1E1E1E", height=230
+            self.main_content, fg_color="#F8FAFC", height=230  # تغيير إلى أبيض فاتح
         )
         self.chart_container.grid(
             row=2, column=0, sticky="nsew", pady=(0, 15)
@@ -148,7 +185,7 @@ class OverviewDashboardPage(ctk.CTkFrame):
 
         # ---------------- 5. الجدول التفصيلي ----------------
         self.table_frame = ctk.CTkFrame(
-            self.main_content, fg_color="#2B2B2B", height=200
+            self.main_content, fg_color="#F8FAFC", height=200  # تغيير إلى أبيض فاتح
         )
         self.table_frame.grid(row=3, column=0, sticky="nsew")
 
@@ -158,7 +195,8 @@ class OverviewDashboardPage(ctk.CTkFrame):
 
     def create_kpi_card(self, parent, col, title, value, bg_color, text_color):
         card = ctk.CTkFrame(
-            parent, fg_color=bg_color, corner_radius=10, border_width=1
+            parent, fg_color=bg_color, corner_radius=10, border_width=1,
+            border_color="#E2E8F0"
         )
         card.grid(row=0, column=col, padx=5, pady=5, sticky="nsew")
 
@@ -261,16 +299,22 @@ class OverviewDashboardPage(ctk.CTkFrame):
         style.theme_use("default")
         style.configure(
             "Treeview",
-            background="#1E1E1E",
-            foreground="white",
-            fieldbackground="#1E1E1E",
+            background="#FFFFFF",  # تغيير إلى أبيض
+            foreground="#0F172A",  # تغيير إلى غامق
+            fieldbackground="#FFFFFF",  # تغيير إلى أبيض
             rowheight=28,
         )
         style.configure(
             "Treeview.Heading",
-            background="#2B2B2B",
-            foreground="white",
+            background="#F1F5F9",  # تغيير إلى رمادي فاتح
+            foreground="#0F172A",  # تغيير إلى غامق
             font=("Segoe UI", 10, "bold"),
+        )
+        # تغيير لون التحديد
+        style.map(
+            "Treeview",
+            background=[("selected", "#3B82F6")],
+            foreground=[("selected", "white")],
         )
 
         cols = (
@@ -437,20 +481,20 @@ class OverviewDashboardPage(ctk.CTkFrame):
             sum(1 for r in rows if r[4] == "ممتاز"),
             sum(1 for r in rows if r[4] == "متعثر"),
         ]
-        colors = ["#008000", "#D4A017", "#008000", "#C00000"]
+        colors = ["#78E5A0", "#E6C86E", "#78E5A0", "#F56969"]
 
-        fig, ax = plt.subplots(figsize=(8, 2.2), facecolor="#1E1E1E")
-        ax.set_facecolor("#1E1E1E")
+        fig, ax = plt.subplots(figsize=(8, 2.2), facecolor="#F8FAFC")  # تغيير الخلفية
+        ax.set_facecolor("#F8FAFC")  # تغيير الخلفية
 
         bars = ax.barh(categories, counts, color=colors, height=0.55)
 
-        ax.tick_params(colors="white", labelsize=10)
-        ax.spines["bottom"].set_color("#444444")
-        ax.spines["left"].set_color("#444444")
+        ax.tick_params(colors="#0F172A", labelsize=10)  # تغيير لون النص
+        ax.spines["bottom"].set_color("#CBD5E1")
+        ax.spines["left"].set_color("#CBD5E1")
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.set_title(
-            "عدد الطلاب لكل تقدير", color="white", fontname="Segoe UI", fontsize=12
+            "عدد الطلاب لكل تقدير", color="#0F172A", fontname="Segoe UI", fontsize=12
         )
 
         for bar in bars:
@@ -462,7 +506,7 @@ class OverviewDashboardPage(ctk.CTkFrame):
                     f"{int(width)}",
                     ha="left",
                     va="center",
-                    color="white",
+                    color="#0F172A",  # تغيير إلى غامق
                     fontweight="bold",
                 )
 

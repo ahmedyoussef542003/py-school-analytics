@@ -251,3 +251,16 @@ def get_students_by_section(db_path, section):
             (section,)
         )
         return cursor.fetchall()
+def get_student_by_name(db_path, name):
+    """جلب بيانات طالبة باستخدام الاسم"""
+    with get_connection(db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT student_id, student_name, grade_level, class_name, section
+            FROM Students
+            WHERE student_name = ?
+            """,
+            (name,)
+        )
+        return cursor.fetchone()
